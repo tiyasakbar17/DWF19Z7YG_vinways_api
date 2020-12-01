@@ -1,0 +1,27 @@
+{
+  "name": "apivinways",
+  "version": "1.0.0",
+  "description": "API server for Co Ways",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tiyasakbar17/DWF19Z7YG_vinways_api"
+  },
+  "keywords": [
+    "REST",
+    "API",
+    "Co",
+    "Ways",
+    "DumbwaysID",
+    "19thBatch"
+  ],
+  "author": "M Tiyas F Akbar",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tiyasakbar17/DWF19Z7YG_vinways_api/issues"
+  },
+  "homepage": "https://github.com/tiyasakbar17/DWF19Z7YG_vinways_api#readme"
+}
