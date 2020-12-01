@@ -14,7 +14,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // for parsing mutiform data
 app.use(express.static("public"));
 
-app.use("/", router);
+app.use("/api/v1", router);
 
 app.listen(3001, () => {
   console.log("Server are running on port 3000");
