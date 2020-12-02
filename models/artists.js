@@ -9,6 +9,9 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Artists.hasMany(models.Songs, {
+        as: "song",
+      });
     }
   }
   Artists.init(
