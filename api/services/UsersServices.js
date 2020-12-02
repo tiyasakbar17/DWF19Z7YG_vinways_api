@@ -3,7 +3,11 @@ const { Users } = require("../../models");
 module.exports = {
   getAllUsers: async (data, callBack) => {
     try {
-      const allUsers = await Users.findAll();
+      const allUsers = await Users.findAll({
+        attributes: {
+          exclude: ["createdAt", "updatedAt"],
+        },
+      });
       if (allUsers === 0) {
         callBack("Post Empty");
       } else {
@@ -19,6 +23,9 @@ module.exports = {
       const user = await Users.findAll({
         where: {
           id: data,
+        },
+        attributes: {
+          exclude: ["createdAt", "updatedAt"],
         },
       });
       if (user === 0) {
@@ -59,6 +66,9 @@ module.exports = {
         const userNew = await Users.findAll({
           where: {
             id: id,
+          },
+          attributes: {
+            exclude: ["createdAt", "updatedAt"],
           },
         });
         if (userNew === 0) {
