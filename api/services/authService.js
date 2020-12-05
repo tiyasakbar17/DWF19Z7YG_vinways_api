@@ -6,10 +6,10 @@ const Joi = require("joi");
 
 module.exports = {
   registerServices: async (data, callBack) => {
-    const { name, email, password } = data;
+    const { fullName, email, password } = data;
     try {
       const schema = Joi.object({
-        name: Joi.string().min(2).required(),
+        fullName: Joi.string().min(2).required(),
         email: Joi.string().min(5).email().required(),
         password: Joi.string().min(6).required(),
       });
@@ -31,8 +31,7 @@ module.exports = {
         } else {
           const hashedPassword = await bcrypt.hash(password, 10);
           const newUser = {
-            fullName: name,
-            email,
+            ...data,
             password: hashedPassword,
           };
           const user = await Users.create(newUser);

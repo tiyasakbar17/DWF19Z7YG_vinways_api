@@ -12,7 +12,7 @@ module.exports = {
       if (error) {
         failedResponse(res, error);
       } else {
-        successResponse(res, results, "Login Success", "user");
+        successResponse(res, results, "Login Success", "chanel");
       }
     });
   },
