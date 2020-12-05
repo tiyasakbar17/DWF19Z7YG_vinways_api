@@ -10,13 +10,19 @@ module.exports = {
     const data = req.body;
     loginService(data, (error, results) => {
       if (error) {
-        failedResponse(res, error);
+        if (error.details) {
+          const details = error.details.map((detail) => detail.message);
+          failedWithDetails(res, error.details[0], details);
+        } else {
+          return failedResponse(res, error);
+        }
       } else {
         successResponse(res, results, "Login Success", "chanel");
       }
     });
   },
   registerController: (req, res) => {
+    console.log(req);
     const data = req.body;
     registerServices(data, (error, results) => {
       if (error) {

@@ -6,7 +6,7 @@ const Joi = require("joi");
 
 module.exports = {
   registerServices: async (data, callBack) => {
-    const { fullName, email, password } = data;
+    const { email, password } = data;
     try {
       const schema = Joi.object({
         fullName: Joi.string().min(2).required(),
@@ -66,6 +66,18 @@ module.exports = {
   loginService: async (data, callBack) => {
     const { email, password } = data;
     try {
+      const schema = Joi.object({
+        email: Joi.string().min(5).email().required(),
+        password: Joi.string().min(6).required(),
+      });
+
+      const { error } = schema.validate({ ...data }, { abortEarly: false });
+
+      if (error) {
+        console.log(error);
+        return callBack(error);
+      }
+
       const user = await Users.findOne({
         where: {
           email,
