@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
@@ -11,9 +12,10 @@ app.use(cors());
 app.use(bodyParser.json());
 // for parsing application/xwww-
 app.use(bodyParser.urlencoded({ extended: true }));
-// for parsing mutiform data
-app.use(express.static("public"));
 
+app.use("/uploads", express.static("uploads"));
+
+//ROUTER To Api
 app.use("/api/v1", router);
 
 app.listen(3001, () => {

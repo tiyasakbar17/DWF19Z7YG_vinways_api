@@ -12,7 +12,6 @@ module.exports = (sequelize, DataTypes) => {
       Users.hasMany(models.Transactions, {
         as: "transactions",
       });
-      Users.hasOne(models.AccessToken);
     }
   }
   Users.init(
@@ -26,7 +25,9 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
+      paranoid: true,
       modelName: "Users",
+      deletedAt: "deleteAt",
     }
   );
   return Users;
