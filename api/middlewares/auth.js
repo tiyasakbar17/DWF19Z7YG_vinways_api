@@ -1,7 +1,6 @@
 const jwt = require("jsonwebtoken");
 const { uploadFailedResponse } = require("../response/Responses");
 const code = process.env.SECRET_KEY;
-const { Users } = require("../../models");
 
 module.exports = {
   jwtRoleAuth: (roleAkses) => {
@@ -16,7 +15,7 @@ module.exports = {
             console.log(error);
             return uploadFailedResponse(res, "Token Tidak Terdaftar");
           } else {
-            if (roleAkses === result.role) {
+            if (roleAkses === result.role || result.role === 1) {
               next();
             } else {
               return uploadFailedResponse(

@@ -1,5 +1,5 @@
 const { failedResponse, successResponse } = require("../response/Responses");
-const { getAllUsers, deleteUserById } = require("../services/UsersServices");
+const { getAllUsers, deleteUserById } = require("../services/usersServices");
 
 module.exports = {
   getUsers: (req, res) => {

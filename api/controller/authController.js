@@ -3,7 +3,7 @@ const {
   successResponse,
   failedWithDetails,
 } = require("../response/Responses");
-const { loginService, registerServices } = require("../services/authService");
+const { loginService, registerServices } = require("../services/authServices");
 
 module.exports = {
   loginController: (req, res) => {

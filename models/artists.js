@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Artists.hasMany(models.Musics, { foreignKey: "artistId", as: "music" });
+      Artists.hasMany(models.Musics, { foreignKey: "artistId", as: "musics" });
     }
   }
   Artists.init(
@@ -17,12 +17,11 @@ module.exports = (sequelize, DataTypes) => {
       name: DataTypes.STRING,
       old: DataTypes.INTEGER,
       category: DataTypes.STRING,
-      startCareer: DataTypes.DATE,
       thumbnail: DataTypes.STRING,
+      startCareer: DataTypes.DATE,
     },
     {
       sequelize,
-      paranoid: true,
       modelName: "Artists",
     }
   );
