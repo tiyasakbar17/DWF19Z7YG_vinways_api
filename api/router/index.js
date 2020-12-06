@@ -6,6 +6,7 @@ const { getUsers, deleteUser } = require("../controller/UserController");
 const { uploadFile } = require("../middlewares/uploadFile");
 const router = require("express").Router();
 const multer = require("multer");
+const upload = multer();
 const { jwtRoleAuth } = require("../middlewares/auth");
 const {
   getMusics,
@@ -14,7 +15,6 @@ const {
   editMusic,
   deleteMusic,
 } = require("../controller/musicController");
-const upload = multer();
 
 //AUTH(LOGIN & REGISTER)
 router.post("/login/", upload.none(), loginController);
@@ -35,8 +35,8 @@ router.post(
 );
 router.patch(
   "/music/:id",
+  jwtRoleAuth(1),
   uploadFile("thumbnail", "attachment"),
-  // jwtRoleAuth(1),
   editMusic
 );
 router.delete("/music/:id", upload.none(), jwtRoleAuth(1), deleteMusic);
