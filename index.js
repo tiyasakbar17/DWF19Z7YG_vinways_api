@@ -2,15 +2,12 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const router = require("./api/router");
-// const multer = require("multer");
-// const upload = multer();
 
 const app = express();
 
 // for passing cors
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
-// app.use(upload.array());
 
 app.use("/uploads", express.static("uploads"));
 

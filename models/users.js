@@ -27,7 +27,6 @@ module.exports = (sequelize, DataTypes) => {
       sequelize,
       paranoid: true,
       modelName: "Users",
-      deletedAt: "deleteAt",
     }
   );
   return Users;

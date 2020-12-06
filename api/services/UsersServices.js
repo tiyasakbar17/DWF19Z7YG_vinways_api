@@ -5,10 +5,10 @@ module.exports = {
     try {
       const allUsers = await Users.findAll({
         attributes: {
-          exclude: ["createdAt", "updatedAt"],
+          exclude: ["createdAt", "updatedAt", "deletedAt", "password"],
         },
       });
-      if (allUsers === 0) {
+      if (!allUsers.length) {
         callBack("Post Empty");
       } else {
         callBack(null, allUsers);

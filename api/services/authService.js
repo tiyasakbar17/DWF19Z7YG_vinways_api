@@ -91,6 +91,8 @@ module.exports = {
       } else {
         const userId = {
           id: user.id,
+          email: user.email,
+          role: user.role,
         };
         jwt.sign(userId, process.env.SECRET_KEY, (error, token) => {
           if (error) {

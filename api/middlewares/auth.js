@@ -14,12 +14,20 @@ module.exports = {
         jwt.verify(token, code, (error, result) => {
           if (error) {
             console.log(error);
-            return uploadFailedResponse(res, error);
+            return uploadFailedResponse(res, "Token Tidak Terdaftar");
           } else {
-            console.log(result);
-            return uploadFailedResponse(res, error);
+            if (roleAkses === result.role) {
+              next();
+            } else {
+              return uploadFailedResponse(
+                res,
+                "You can't Access this endpoint"
+              );
+            }
           }
         });
+      } else {
+        return uploadFailedResponse(res, "No Token Inserted");
       }
     };
   },
