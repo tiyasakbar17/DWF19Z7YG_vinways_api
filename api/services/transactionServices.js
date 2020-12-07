@@ -144,4 +144,18 @@ module.exports = {
       callBack("Server Error");
     }
   },
+  deleteTransaction: async (data, callBack) => {
+    try {
+      const deletedTransaction = await Transactions.destroy({
+        where: { id: data },
+      });
+      if (!deletedTransaction) {
+        callBack("Data Not Found");
+      } else {
+        callBack(null, "success");
+      }
+    } catch (error) {
+      callBack("Server Error");
+    }
+  },
 };

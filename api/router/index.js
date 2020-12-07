@@ -20,12 +20,14 @@ const {
   getArtist,
   addArtist,
   editArtist,
+  deleteArtist,
 } = require("../controller/artistController");
 const {
   getTransactions,
   getTransaction,
   addTransaction,
   editTransaction,
+  deleteTransaction,
 } = require("../controller/transactionControler");
 
 //AUTH(LOGIN & REGISTER)
@@ -68,6 +70,7 @@ router.patch(
   uploadFile("thumbnail", null),
   editArtist
 );
+router.delete("/artist/:id", jwtRoleAuth(1), deleteArtist);
 
 //TRANSACTION
 router.get("/transactions/", getTransactions);
@@ -84,5 +87,6 @@ router.patch(
   uploadFile("thumbnail", null),
   editTransaction
 );
+router.delete("/transaction/:id", jwtRoleAuth(1), deleteTransaction);
 
 module.exports = router;

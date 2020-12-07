@@ -8,6 +8,7 @@ const {
   getTransactionById,
   addTransaction,
   editTransaction,
+  deleteTransaction,
 } = require("../services/transactionServices");
 
 module.exports = {
@@ -40,7 +41,13 @@ module.exports = {
           failedResponse(res, error);
         }
       } else {
-        successResponse(res, results);
+        successResponse(
+          res,
+          results,
+          "Transaction is Added",
+          "transaction",
+          201
+        );
       }
     });
   },
@@ -54,7 +61,16 @@ module.exports = {
           failedResponse(res, error);
         }
       } else {
-        successResponse(res, results);
+        successResponse(res, results, "Transaction is Edited", "transaction");
+      }
+    });
+  },
+  deleteTransaction: (req, res) => {
+    deleteTransaction(req.params.id, (error, results) => {
+      if (error) {
+        failedResponse(res, error);
+      } else {
+        successResponse(res, req.params.id, "Transaction is Deleted", "id");
       }
     });
   },
