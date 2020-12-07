@@ -36,7 +36,7 @@ module.exports = {
       if (error) {
         if (error.details) {
           const details = error.details.map((detail) => detail.message);
-          failedWithDetails(res, error.details[0], details);
+          failedWithDetails(res, error.details[0].message, details);
         } else {
           return failedResponse(res, error);
         }
@@ -51,7 +51,7 @@ module.exports = {
       if (error) {
         if (error.details) {
           const details = error.details.map((detail) => detail.message);
-          failedWithDetails(res, error.details[0], details);
+          failedWithDetails(res, error.details[0].message, details);
         } else {
           return failedResponse(res, error);
         }

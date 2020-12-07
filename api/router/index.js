@@ -21,6 +21,12 @@ const {
   addArtist,
   editArtist,
 } = require("../controller/artistController");
+const {
+  getTransactions,
+  getTransaction,
+  addTransaction,
+  editTransaction,
+} = require("../controller/transactionControler");
 
 //AUTH(LOGIN & REGISTER)
 router.post("/login/", upload.none(), loginController);
@@ -61,6 +67,22 @@ router.patch(
   jwtRoleAuth(1),
   uploadFile("thumbnail", null),
   editArtist
+);
+
+//TRANSACTION
+router.get("/transactions/", getTransactions);
+router.get("/transaction/:id", getTransaction);
+router.post(
+  "/transaction/",
+  jwtRoleAuth(1),
+  uploadFile("thumbnail", null),
+  addTransaction
+);
+router.patch(
+  "/transaction/:id",
+  jwtRoleAuth(1),
+  uploadFile("thumbnail", null),
+  editTransaction
 );
 
 module.exports = router;
