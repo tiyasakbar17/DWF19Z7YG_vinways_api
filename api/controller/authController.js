@@ -3,7 +3,11 @@ const {
   successResponse,
   failedWithDetails,
 } = require("../response/Responses");
-const { loginService, registerServices } = require("../services/authServices");
+const {
+  loginService,
+  registerServices,
+  findUserDataById,
+} = require("../services/authServices");
 
 module.exports = {
   loginController: (req, res) => {
@@ -44,6 +48,16 @@ module.exports = {
           "user",
           201
         );
+      }
+    });
+  },
+  findUserByToken: (req, res) => {
+    const { id } = req.user;
+    findUserDataById(id, (error, result) => {
+      if (error) {
+        failedResponse(res, error);
+      } else {
+        successResponse(res, result, "Data Loaded", "user");
       }
     });
   },

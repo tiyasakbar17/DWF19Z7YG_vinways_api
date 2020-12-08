@@ -1,5 +1,8 @@
 const jwt = require("jsonwebtoken");
-const { uploadFailedResponse } = require("../response/Responses");
+const {
+  uploadFailedResponse,
+  failedResponse,
+} = require("../response/Responses");
 const code = process.env.SECRET_KEY;
 
 module.exports = {
@@ -29,5 +32,21 @@ module.exports = {
         return uploadFailedResponse(res, "No Token Inserted");
       }
     };
+  },
+  findAccount: async (req, res, next) => {
+    try {
+      const tokenWithBearer = req.headers.authorization;
+      if (!tokenWithBearer) {
+        failedResponse(res, "Token is not Detected");
+      } else {
+        let token = tokenWithBearer.split(" ")[1];
+        const dataUser = jwt.verify(token, code);
+        req.user = dataUser;
+        next();
+      }
+    } catch (error) {
+      console.log(error);
+      failedResponse(res, error);
+    }
   },
 };

@@ -2,12 +2,16 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const router = require("./api/router");
+const bodyParser = require("body-parser");
 
 const app = express();
 
 // for passing cors
 app.use(cors());
-app.use(express.urlencoded({ extended: true }));
+// for parsing application/json
+app.use(bodyParser.json());
+// for parsing application/xwww-
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use("/uploads", express.static("uploads"));
 

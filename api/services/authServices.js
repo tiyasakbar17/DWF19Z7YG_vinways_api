@@ -1,5 +1,4 @@
 const { Users } = require("../../models");
-const { failedResponse, successResponse } = require("../response/Responses");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const Joi = require("joi");
@@ -109,6 +108,22 @@ module.exports = {
       }
     } catch (error) {
       return callBack("Server Error");
+    }
+  },
+  findUserDataById: async (data, callBack) => {
+    try {
+      const dataUser = await Users.findOne({
+        where: { id: data },
+        attributes: { exclude: ["createdAt", "updatedAt", "deletedAt"] },
+      });
+      if (!dataUser) {
+        callBack("User Not Found");
+      } else {
+        callBack(dataUser);
+      }
+    } catch (error) {
+      console.log(error);
+      callBack(error);
     }
   },
 };

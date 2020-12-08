@@ -1,10 +1,11 @@
 const router = require("express").Router();
 const multer = require("multer");
 const upload = multer();
-const { jwtRoleAuth } = require("../middlewares/auth"); // Value 1 = admin 2 = userbiasa
+const { jwtRoleAuth, findAccount } = require("../middlewares/auth"); // Value 1 = admin 2 = userbiasa
 const {
   loginController,
   registerController,
+  findUserByToken,
 } = require("../controller/authController");
 const { getUsers, deleteUser } = require("../controller/userController");
 const { uploadFile } = require("../middlewares/uploadFile");
@@ -33,6 +34,7 @@ const {
 //AUTH(LOGIN & REGISTER)
 router.post("/login/", upload.none(), loginController);
 router.post("/register/", upload.none(), registerController);
+router.get("/getData/", findAccount, findUserByToken);
 
 //USER
 router.get("/users/", getUsers);
