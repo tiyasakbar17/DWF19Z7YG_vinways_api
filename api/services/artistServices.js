@@ -1,4 +1,4 @@
-const { Artists } = require("../../models");
+const { Artists, Musics } = require("../../models");
 const Joi = require("joi");
 
 module.exports = {
@@ -6,6 +6,20 @@ module.exports = {
     try {
       const artistLists = await Artists.findAll({
         attributes: { exclude: ["createdAt", "updatedAt", "deletedAt"] },
+        include: [
+          {
+            model: Musics,
+            as: "musics",
+            attributes: { exclude: ["createdAt", "updatedAt", "deletedAt"] },
+            include: [
+              {
+                model: Artists,
+                as: "artist",
+                attributes: ["name"],
+              },
+            ],
+          },
+        ],
       });
       if (!artistLists) {
         callBack("No Artists Found");

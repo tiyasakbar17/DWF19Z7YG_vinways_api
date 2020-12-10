@@ -15,8 +15,9 @@ module.exports = {
     loginService(data, (error, results) => {
       if (error) {
         if (error.details) {
+          console.log(error);
           const details = error.details.map((detail) => detail.message);
-          failedWithDetails(res, error.details[0], details);
+          failedWithDetails(res, error.details[0].message, details);
         } else {
           return failedResponse(res, error);
         }
@@ -26,13 +27,12 @@ module.exports = {
     });
   },
   registerController: (req, res) => {
-    console.log(req);
     const data = req.body;
     registerServices(data, (error, results) => {
       if (error) {
         if (error.details) {
           const details = error.details.map((detail) => detail.message);
-          failedWithDetails(res, error.details[0], details);
+          failedWithDetails(res, error.details[0].message, details);
         } else {
           return failedResponse(res, error);
         }

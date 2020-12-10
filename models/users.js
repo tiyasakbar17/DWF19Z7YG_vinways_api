@@ -21,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
       password: DataTypes.STRING,
       thumbnail: DataTypes.STRING,
       role: DataTypes.INTEGER,
-      activeDay: DataTypes.INTEGER,
+      activeDay: DataTypes.DATE,
     },
     {
       sequelize,

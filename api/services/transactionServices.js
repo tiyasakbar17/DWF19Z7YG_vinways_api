@@ -10,9 +10,7 @@ module.exports = {
           {
             model: Users,
             as: "user",
-            attributes: {
-              exclude: ["createdAt", "updatedAt", "deletedAt"],
-            },
+            attributes: ["fullName", "activeDay"],
           },
         ],
       });
@@ -50,7 +48,8 @@ module.exports = {
     }
   },
   addTransaction: async (data, callBack) => {
-    const { body, files } = data;
+    const { body, files, user } = data;
+    console.log(user);
     try {
       const schema = Joi.object({
         userId: Joi.number().required(),
@@ -60,6 +59,7 @@ module.exports = {
 
       const insertedData = {
         ...body,
+        userId: user.id,
         proofOfTransfer: files.thumbnail ? files.thumbnail[0].filename : null,
       };
 
@@ -93,9 +93,16 @@ module.exports = {
     }
   },
   editTransaction: async (data, callBack) => {
-    const { params: id, body, files } = data;
+    const {
+      params: { id },
+      body,
+      files,
+    } = data;
     try {
-      const calledTransaction = await Transactions.findOne({ where: { id } });
+      const calledTransaction = await Transactions.findOne({
+        where: { id },
+        include: [{ model: Users, as: "user" }],
+      });
       if (!calledTransaction) {
         callBack("Transaction is not found");
       } else {
@@ -103,6 +110,7 @@ module.exports = {
           userId: Joi.number(),
           bankAccountNumber: Joi.number(),
           proofOfTransfer: Joi.string(),
+          paymentStatus: Joi.boolean(),
         });
 
         const insertedData = {
@@ -117,6 +125,43 @@ module.exports = {
         if (error) {
           callBack(error);
         } else {
+          const oldDate = await new Date(
+            calledTransaction.user.activeDay
+          ).getTime();
+          const today = Date.now();
+          const increment = 30 * 24 * 60 * 60 * 1000;
+          if (calledTransaction.paymentStatus === null) {
+            if (body.paymentStatus === "true") {
+              if (oldDate < today) {
+                const newActiveDay = {
+                  activeDay: new Date(today + increment),
+                };
+                const newUser = await Users.update(newActiveDay, {
+                  where: { id: calledTransaction.userId },
+                });
+                console.log(newActiveDay);
+              } else {
+                const newActiveDay = {
+                  activeDay: new Date(oldDate + increment),
+                };
+                const newUser = await Users.update(newActiveDay, {
+                  where: { id: calledTransaction.userId },
+                });
+                console.log(newActiveDay);
+              }
+            }
+          }
+          if (calledTransaction.paymentStatus === true) {
+            if (body.paymentStatus === "false") {
+              const newActiveDay = {
+                activeDay: new Date(oldDate - increment),
+              };
+              const newUser = await Users.update(newActiveDay, {
+                where: { id: calledTransaction.userId },
+              });
+              console.log(newActiveDay);
+            }
+          }
           const editedTransaction = await Transactions.update(insertedData, {
             where: { id },
           });
@@ -130,9 +175,7 @@ module.exports = {
                 {
                   model: Users,
                   as: "user",
-                  attributes: {
-                    exclude: ["createdAt", "updatedAt", "deletedAt"],
-                  },
+                  attributes: ["fullName", "activeDay"],
                 },
               ],
             });

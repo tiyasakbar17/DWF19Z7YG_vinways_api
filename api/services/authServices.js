@@ -1,4 +1,4 @@
-const { Users } = require("../../models");
+const { Users, Transactions } = require("../../models");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const Joi = require("joi");
@@ -107,19 +107,31 @@ module.exports = {
         });
       }
     } catch (error) {
-      return callBack("Server Error");
+      console.log(error);
+      return callBack("Check Your Email Or Password");
     }
   },
   findUserDataById: async (data, callBack) => {
     try {
       const dataUser = await Users.findOne({
         where: { id: data },
-        attributes: { exclude: ["createdAt", "updatedAt", "deletedAt"] },
+        attributes: {
+          exclude: ["createdAt", "updatedAt", "deletedAt", "password"],
+        },
+        include: [
+          {
+            model: Transactions,
+            as: "transactions",
+            attributes: {
+              exclude: ["createdAt", "updatedAt", "deletedAt", "password"],
+            },
+          },
+        ],
       });
       if (!dataUser) {
         callBack("User Not Found");
       } else {
-        callBack(dataUser);
+        callBack(null, dataUser);
       }
     } catch (error) {
       console.log(error);

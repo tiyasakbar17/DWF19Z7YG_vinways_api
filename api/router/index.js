@@ -79,7 +79,7 @@ router.get("/transactions/", getTransactions);
 router.get("/transaction/:id", getTransaction);
 router.post(
   "/transaction/",
-  jwtRoleAuth(1),
+  jwtRoleAuth(2),
   uploadFile("thumbnail", null),
   addTransaction
 );

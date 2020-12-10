@@ -10,15 +10,14 @@ module.exports = {
     return async (req, res, next) => {
       //check token
       const tokenWithBearer = req.headers.authorization;
-
       if (tokenWithBearer) {
-        let token = tokenWithBearer.split(" ")[1];
-        jwt.verify(token, code, (error, result) => {
+        jwt.verify(tokenWithBearer, code, (error, result) => {
           if (error) {
             console.log(error);
             return uploadFailedResponse(res, "Token Tidak Terdaftar");
           } else {
             if (roleAkses === result.role || result.role === 1) {
+              req.user = result;
               next();
             } else {
               return uploadFailedResponse(
@@ -39,8 +38,7 @@ module.exports = {
       if (!tokenWithBearer) {
         failedResponse(res, "Token is not Detected");
       } else {
-        let token = tokenWithBearer.split(" ")[1];
-        const dataUser = jwt.verify(token, code);
+        const dataUser = await jwt.verify(tokenWithBearer, code);
         req.user = dataUser;
         next();
       }

@@ -56,6 +56,7 @@ module.exports = {
   },
   addMusicService: async (data, callBack) => {
     const { body, files } = data;
+    console.log(body, files);
     try {
       const schema = Joi.object({
         title: Joi.string().required(),
