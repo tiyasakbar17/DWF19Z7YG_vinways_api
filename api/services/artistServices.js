@@ -56,7 +56,6 @@ module.exports = {
         startCareer: Joi.date().required(),
         thumbnail: Joi.string().required(),
       });
-
       const dataArtist = {
         ...data,
         thumbnail: file.thumbnail ? file.thumbnail[0].filename : null,

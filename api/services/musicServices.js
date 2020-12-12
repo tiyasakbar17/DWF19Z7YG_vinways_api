@@ -56,7 +56,6 @@ module.exports = {
   },
   addMusicService: async (data, callBack) => {
     const { body, files } = data;
-    console.log(body, files);
     try {
       const schema = Joi.object({
         title: Joi.string().required(),
@@ -68,6 +67,7 @@ module.exports = {
 
       const newMusic = {
         ...body,
+        artistId: body.artistId !== "0" ? body.artistId : null,
         thumbnail: files.thumbnail ? files.thumbnail[0].filename : null,
         attachment: files.attachment ? files.attachment[0].filename : null,
       };

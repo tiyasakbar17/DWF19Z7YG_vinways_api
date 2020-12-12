@@ -34,7 +34,7 @@ module.exports = {
           {
             model: Users,
             as: "user",
-            attributes: { exclude: ["createdAt", "updatedAt", "deletedAt"] },
+            attributes: ["fullName", "activeDay"],
           },
         ],
       });
@@ -79,9 +79,7 @@ module.exports = {
               {
                 model: Users,
                 as: "user",
-                attributes: {
-                  exclude: ["createdAt", "updatedAt", "deletedAt"],
-                },
+                attributes: ["fullName", "activeDay"],
               },
             ],
           });

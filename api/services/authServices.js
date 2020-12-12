@@ -32,6 +32,7 @@ module.exports = {
           const newUser = {
             ...data,
             password: hashedPassword,
+            role: 2,
           };
           const user = await Users.create(newUser);
 

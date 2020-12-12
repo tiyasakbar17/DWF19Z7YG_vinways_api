@@ -58,8 +58,8 @@ router.patch(
 router.delete("/music/:id", upload.none(), jwtRoleAuth(1), deleteMusic);
 
 //ARTIST
-router.get("/artists/", getArtists);
-router.get("/artist/:id", getArtist);
+router.get("/artists/", jwtRoleAuth(2), getArtists);
+router.get("/artist/:id", jwtRoleAuth(2), getArtist);
 router.post(
   "/artist/",
   jwtRoleAuth(1),
@@ -75,8 +75,8 @@ router.patch(
 router.delete("/artist/:id", jwtRoleAuth(1), deleteArtist);
 
 //TRANSACTION
-router.get("/transactions/", getTransactions);
-router.get("/transaction/:id", getTransaction);
+router.get("/transactions/", jwtRoleAuth(1), getTransactions);
+router.get("/transaction/:id", jwtRoleAuth(1), getTransaction);
 router.post(
   "/transaction/",
   jwtRoleAuth(2),
