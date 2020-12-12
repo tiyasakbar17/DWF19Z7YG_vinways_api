@@ -18,6 +18,6 @@ app.use("/uploads", express.static("uploads"));
 //ROUTER To Api
 app.use("/api/v1", router);
 
-app.listen(3001, () => {
+app.listen(5000, () => {
   console.log("Server are running on port 3001");
 });
