@@ -11,7 +11,6 @@ module.exports = {
         role: 1,
         createdAt: new Date(),
         updatedAt: new Date(),
-        deletedAt: "0000-00-00",
       },
     ]);
 
