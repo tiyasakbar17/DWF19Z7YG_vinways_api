@@ -3,6 +3,7 @@ const express = require("express");
 const cors = require("cors");
 const router = require("./api/router");
 const bodyParser = require("body-parser");
+const port = process.env.PORT || 5000;
 
 const app = express();
 
@@ -18,6 +19,6 @@ app.use("/uploads", express.static("uploads"));
 //ROUTER To Api
 app.use("/api/v1", router);
 
-app.listen(5000, () => {
-  console.log("Server are running on port 3001");
+app.listen(port, () => {
+  console.log(`Server are running on port ${port}`);
 });

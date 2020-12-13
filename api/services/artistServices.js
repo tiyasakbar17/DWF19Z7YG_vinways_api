@@ -10,7 +10,7 @@ module.exports = {
           {
             model: Musics,
             as: "musics",
-            attributes: { exclude: ["createdAt", "updatedAt", "deletedAt"] },
+            attributes: { exclude: ["updatedAt", "deletedAt"] },
             include: [
               {
                 model: Artists,

@@ -34,13 +34,16 @@ exports.uploadFile = (image, audio) => {
 
   let streamUpload = (buffer) => {
     return new Promise((resolve, reject) => {
-      let stream = cloudinary.uploader.upload_stream((error, result) => {
-        if (result) {
-          resolve(result);
-        } else {
-          reject(error);
+      let stream = cloudinary.uploader.upload_stream(
+        { resource_type: "auto" },
+        (error, result) => {
+          if (result) {
+            resolve(result);
+          } else {
+            reject(error);
+          }
         }
-      });
+      );
 
       streamifier.createReadStream(buffer).pipe(stream);
     });
@@ -57,7 +60,7 @@ exports.uploadFile = (image, audio) => {
         };
       }
       if (req.files.attachment) {
-        let result = await streamUpload(req.files.thumbnail[0].buffer);
+        let result = await streamUpload(req.files.attachment[0].buffer);
         req.files.attachment[0] = {
           ...req.files.attachment[0],
           filename: result.url,
