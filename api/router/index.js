@@ -6,6 +6,7 @@ const {
   loginController,
   registerController,
   findUserByToken,
+  changePict,
 } = require("../controller/authController");
 const { getUsers, deleteUser } = require("../controller/userController");
 const { uploadFile } = require("../middlewares/uploadFile");
@@ -29,12 +30,19 @@ const {
   addTransaction,
   editTransaction,
   deleteTransaction,
+  getUserTransactions,
 } = require("../controller/transactionControler");
 
 //AUTH(LOGIN & REGISTER)
 router.post("/login/", upload.none(), loginController);
 router.post("/register/", upload.none(), registerController);
 router.get("/getData/", findAccount, findUserByToken);
+router.patch(
+  "/changePicture/",
+  jwtRoleAuth(2),
+  uploadFile("thumbnail", null),
+  changePict
+);
 
 //USER
 router.get("/users/", getUsers);
@@ -77,6 +85,7 @@ router.delete("/artist/:id", jwtRoleAuth(1), deleteArtist);
 //TRANSACTION
 router.get("/transactions/", jwtRoleAuth(1), getTransactions);
 router.get("/transaction/:id", jwtRoleAuth(1), getTransaction);
+router.get("/usertransactions/", jwtRoleAuth(2), getUserTransactions);
 router.post(
   "/transaction/",
   jwtRoleAuth(2),

@@ -7,6 +7,7 @@ const {
   loginService,
   registerServices,
   findUserDataById,
+  changeUserPict,
 } = require("../services/authServices");
 
 module.exports = {
@@ -58,6 +59,15 @@ module.exports = {
         failedResponse(res, error);
       } else {
         successResponse(res, result, "Data Loaded", "user");
+      }
+    });
+  },
+  changePict: (req, res) => {
+    changeUserPict(req, (error, result) => {
+      if (error) {
+        failedResponse(res, error);
+      } else {
+        successResponse(res, "Success", "Profle Picture Updated", "status");
       }
     });
   },

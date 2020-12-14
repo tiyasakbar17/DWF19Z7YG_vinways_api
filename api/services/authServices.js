@@ -139,4 +139,18 @@ module.exports = {
       callBack(error);
     }
   },
+  changeUserPict: async (data, callBack) => {
+    const newData = {
+      thumbnail: data.files.thumbnail[0].filename,
+    };
+    try {
+      const result = await Users.update(newData, {
+        where: { id: data.user.id },
+      });
+      callBack(null, result);
+    } catch (error) {
+      console.log(error);
+      callBack(error);
+    }
+  },
 };

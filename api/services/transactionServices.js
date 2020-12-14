@@ -5,7 +5,7 @@ module.exports = {
   getAllTransactions: async (data, callBack) => {
     try {
       const allTransactions = await Transactions.findAll({
-        attributes: { exclude: ["createdAt", "updatedAt", "deletedAt"] },
+        attributes: { exclude: ["updatedAt", "deletedAt"] },
         include: [
           {
             model: Users,
@@ -195,6 +195,17 @@ module.exports = {
       } else {
         callBack(null, "success");
       }
+    } catch (error) {
+      callBack("Server Error");
+    }
+  },
+  getUserTransactions: async (data, callBack) => {
+    try {
+      const getData = await Transactions.findAll({
+        where: { userId: data },
+        attributes: { exclude: ["updatedAt", "deletedAt"] },
+      });
+      callBack(null, getData);
     } catch (error) {
       callBack("Server Error");
     }

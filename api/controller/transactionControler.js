@@ -9,6 +9,7 @@ const {
   addTransaction,
   editTransaction,
   deleteTransaction,
+  getUserTransactions,
 } = require("../services/transactionServices");
 
 module.exports = {
@@ -71,6 +72,16 @@ module.exports = {
         failedResponse(res, error);
       } else {
         successResponse(res, req.params.id, "Transaction is Deleted", "id");
+      }
+    });
+  },
+  getUserTransactions: (req, res) => {
+    const { id } = req.user;
+    getUserTransactions(id, (error, results) => {
+      if (error) {
+        successResponse(res, [], "Transaction Loaded", "transactions");
+      } else {
+        successResponse(res, results, "Transactions Loaded", "transactions");
       }
     });
   },
