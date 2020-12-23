@@ -47,13 +47,12 @@ module.exports = {
   },
   editMusic: (req, res) => {
     editMusicService(req, (error, results) => {
-      console.log(error);
       if (error) {
         if (error.details) {
           const details = error.details.map((detail) => detail.message);
           failedWithDetails(res, error.details[0].message, details);
         } else {
-          return failedResponse(res, error);
+          failedResponse(res, error);
         }
       } else {
         successResponse(res, results, "Music Edited", "music");

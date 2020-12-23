@@ -13,8 +13,9 @@ module.exports = (sequelize, DataTypes) => {
         as: "album",
         foreignKey: "albumId",
       });
-      song.hasMany(models.user, {
-        through: models.like,
+      song.hasMany(models.like, {
+        as: "likedBy",
+        foreignKey: "songId",
       });
       song.hasMany(models.playlistsong, {
         as: "playlists",
@@ -27,6 +28,7 @@ module.exports = (sequelize, DataTypes) => {
       title: DataTypes.STRING,
       thumbnail: DataTypes.STRING,
       attachment: DataTypes.STRING,
+      year: DataTypes.INTEGER,
       genre: DataTypes.STRING,
       albumId: DataTypes.INTEGER,
     },

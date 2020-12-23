@@ -8,6 +8,7 @@ const {
   registerServices,
   findUserDataById,
   changeUserPict,
+  handlerLike,
 } = require("../services/authServices");
 
 module.exports = {
@@ -16,7 +17,6 @@ module.exports = {
     loginService(data, (error, results) => {
       if (error) {
         if (error.details) {
-          console.log(error);
           const details = error.details.map((detail) => detail.message);
           failedWithDetails(res, error.details[0].message, details);
         } else {
@@ -69,6 +69,14 @@ module.exports = {
       } else {
         successResponse(res, "Success", "Profle Picture Updated", "status");
       }
+    });
+  },
+  likeHandler: (rea, res) => {
+    handlerLike(req, (error, results) => {
+      if (error) {
+        return failedResponse(res, error);
+      }
+      successResponse(res, results, results, "status");
     });
   },
 };

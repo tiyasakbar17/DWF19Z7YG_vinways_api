@@ -1,34 +1,42 @@
-const { Musics, Artists } = require("../../models");
+const { song, artist, album } = require("../../models");
 const Joi = require("joi");
 
 module.exports = {
   getAllMusics: async (callBack) => {
     try {
-      const allMusics = await Musics.findAll({
+      const allMusics = await song.findAll({
         attributes: {
-          exclude: ["createdAt", "updatedAt", "artistId", "deletedAt"],
+          exclude: ["updatedAt"],
         },
-        include: {
-          model: Artists,
-          as: "artist",
-          attributes: {
-            exclude: ["createdAt", "updatedAt", "deletedAt"],
+        include: [
+          {
+            model: album,
+            as: "album",
+            attributes: {
+              exclude: ["updatedAt"],
+            },
+            include: [
+              {
+                model: artist,
+                as: "artist",
+                attributes: ["name"],
+              },
+            ],
           },
-        },
+        ],
       });
       if (!allMusics.length) {
-        callBack("Musics Empty");
+        return callBack("Musics Empty");
       } else {
-        callBack(null, allMusics);
+        return callBack(null, allMusics);
       }
     } catch (error) {
-      console.log(error);
       callBack(error);
     }
   },
   getMusicById: async (data, callBack) => {
     try {
-      const music = await Musics.findOne({
+      const music = await song.findOne({
         where: {
           id: data,
         },
@@ -37,16 +45,23 @@ module.exports = {
         },
         include: [
           {
-            model: Artists,
-            as: "artist",
+            model: album,
+            as: "album",
             attributes: {
-              exclude: ["createdAt", "updatedAt", "deletedAt"],
+              exclude: ["updatedAt"],
             },
+            include: [
+              {
+                model: artist,
+                as: "artist",
+                attributes: ["name"],
+              },
+            ],
           },
         ],
       });
       if (!music) {
-        callBack(`Music with id ${data} is not found`);
+        return callBack(`Music with id ${data} is not found`);
       } else {
         callBack(null, music);
       }
@@ -59,15 +74,15 @@ module.exports = {
     try {
       const schema = Joi.object({
         title: Joi.string().required(),
-        artistId: Joi.number().required(),
+        albumId: Joi.number().required(),
         year: Joi.number().required(),
+        genre: Joi.string().required(),
         thumbnail: Joi.string().required(),
         attachment: Joi.string().required(),
       });
 
       const newMusic = {
         ...body,
-        artistId: body.artistId !== "0" ? body.artistId : null,
         thumbnail: files.thumbnail ? files.thumbnail[0].filename : null,
         attachment: files.attachment ? files.attachment[0].filename : null,
       };
@@ -75,49 +90,26 @@ module.exports = {
       const { error } = schema.validate(newMusic, { abortEarly: false });
 
       if (error) {
-        callBack(error);
-      } else {
-        const music = await Musics.create(newMusic);
-        if (!music) {
-          callBack("Please Try Again");
-        } else {
-          const results = await Musics.findOne({
-            where: {
-              id: music.id,
-            },
-            attributes: {
-              exclude: ["createdAt", "updatedAt", "artistId"],
-            },
-            include: [
-              {
-                model: Artists,
-                as: "artist",
-                attributes: {
-                  exclude: ["createdAt", "updatedAt", "deletedAt"],
-                },
-              },
-            ],
-          });
-          if (!results) {
-            callBack("Music Not Found");
-          } else {
-            callBack(null, results);
-          }
-        }
+        return callBack(error);
       }
+
+      const music = await song.create(newMusic);
+      if (!music) {
+        return callBack("Please Try Again");
+      }
+      callBack(null, music);
     } catch (error) {
-      console.log(error);
       callBack(error);
     }
   },
   editMusicService: async (data, callBack) => {
     const { body, files } = data;
-    const id = data.params.id;
+    const { id } = data.params;
     try {
-      const selectedMusic = await Musics.findOne({ where: { id } });
+      const selectedMusic = await song.findOne({ where: { id } });
       const schema = Joi.object({
         title: Joi.string(),
-        artistId: Joi.number(),
+        albumId: Joi.number(),
         year: Joi.number(),
         thumbnail: Joi.string(),
         attachment: Joi.string(),
@@ -136,39 +128,17 @@ module.exports = {
       const { error } = schema.validate(musicData, { abortEarly: false });
 
       if (error) {
-        callBack(error);
+        return callBack(error);
       } else {
-        const music = await Musics.update(musicData, {
+        const music = await song.update(musicData, {
           where: {
             id,
           },
         });
         if (!music) {
-          callBack("Please Try Again");
-        } else {
-          const results = await Musics.findOne({
-            where: {
-              id,
-            },
-            attributes: {
-              exclude: ["createdAt", "updatedAt", "artistId"],
-            },
-            include: [
-              {
-                model: Artists,
-                as: "artist",
-                attributes: {
-                  exclude: ["createdAt", "updatedAt", "deletedAt"],
-                },
-              },
-            ],
-          });
-          if (!results) {
-            callBack("Music Not Found");
-          } else {
-            callBack(null, results);
-          }
+          return callBack("Please Try Again");
         }
+        callBack(null, music);
       }
     } catch (error) {
       callBack(error);
@@ -176,17 +146,15 @@ module.exports = {
   },
   deleteMusicById: async (data, callBack) => {
     try {
-      const musicDelete = await Musics.destroy({
+      const musicDelete = await song.destroy({
         where: {
           id: data,
         },
       });
-      if (musicDelete) {
-        callBack(null, "success");
-      } else {
-        console.log(musicDelete);
-        callBack("Music Not Found");
+      if (!musicDelete) {
+        return callBack(null, "Can't Delete This Song");
       }
+      return callBack("Music Deleted");
     } catch (error) {
       callBack(error);
     }

@@ -17,6 +17,9 @@ module.exports = {
       attachment: {
         type: Sequelize.STRING,
       },
+      year: {
+        type: Sequelize.INTEGER,
+      },
       genre: {
         type: Sequelize.STRING,
       },

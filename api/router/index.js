@@ -1,14 +1,14 @@
 const router = require("express").Router();
 const multer = require("multer");
 const upload = multer();
-const { jwtRoleAuth, findAccount } = require("../middlewares/auth"); // Value 1 = admin 2 = userbiasa
+const { jwtRoleAuth } = require("../middlewares/auth"); // Value 1 = admin 2 = userbiasa
 const {
   loginController,
   registerController,
   findUserByToken,
   changePict,
+  likeHandler,
 } = require("../controller/authController");
-const { getUsers, deleteUser } = require("../controller/userController");
 const { uploadFile } = require("../middlewares/uploadFile");
 const {
   getMusics,
@@ -36,34 +36,31 @@ const {
 //AUTH(LOGIN & REGISTER)
 router.post("/login/", upload.none(), loginController);
 router.post("/register/", upload.none(), registerController);
-router.get("/getData/", findAccount, findUserByToken);
+router.get("/getData/", jwtRoleAuth(2), findUserByToken);
 router.patch(
   "/changePicture/",
   jwtRoleAuth(2),
   uploadFile("thumbnail", null),
   changePict
 );
-
-//USER
-router.get("/users/", getUsers);
-router.delete("/user/:id", deleteUser);
+router.post("/like/:songId", jwtRoleAuth(2), likeHandler);
 
 //MUSIC
-router.get("/musics/", jwtRoleAuth(2), getMusics);
-router.get("/music/:id", jwtRoleAuth(2), getMusic);
+router.get("/songs/", jwtRoleAuth(2), getMusics);
+router.get("/song/:id", jwtRoleAuth(2), getMusic);
 router.post(
-  "/music/",
+  "/song/",
   jwtRoleAuth(1),
   uploadFile("thumbnail", "attachment"),
   addMusic
 );
 router.patch(
-  "/music/:id",
+  "/song/:id",
   jwtRoleAuth(1),
   uploadFile("thumbnail", "attachment"),
   editMusic
 );
-router.delete("/music/:id", upload.none(), jwtRoleAuth(1), deleteMusic);
+router.delete("/song/:id", upload.none(), jwtRoleAuth(1), deleteMusic);
 
 //ARTIST
 router.get("/artists/", jwtRoleAuth(2), getArtists);

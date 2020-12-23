@@ -1,4 +1,4 @@
-const { Users, Transactions } = require("../../models");
+const { user, transaction, playlist, like } = require("../../models");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const Joi = require("joi");
@@ -16,10 +16,9 @@ module.exports = {
       const { error } = schema.validate({ ...data }, { abortEarly: false });
 
       if (error) {
-        console.log(error);
         return callBack(error);
       } else {
-        const checkEmail = await Users.findOne({
+        const checkEmail = await user.findOne({
           where: {
             email,
           },
@@ -34,7 +33,7 @@ module.exports = {
             password: hashedPassword,
             role: 2,
           };
-          const user = await Users.create(newUser);
+          const user = await user.create(newUser);
 
           const tokenPayload = {
             id: user.id,
@@ -49,7 +48,6 @@ module.exports = {
             },
             (error, token) => {
               if (error) {
-                console.log(error);
                 return callBack(error);
               } else {
                 return callBack(null, token);
@@ -59,7 +57,6 @@ module.exports = {
         }
       }
     } catch (error) {
-      console.log(error);
       return callBack(error);
     }
   },
@@ -74,11 +71,10 @@ module.exports = {
       const { error } = schema.validate({ ...data }, { abortEarly: false });
 
       if (error) {
-        console.log(error);
         return callBack(error);
       }
 
-      const user = await Users.findOne({
+      const user = await user.findOne({
         where: {
           email,
         },
@@ -94,37 +90,56 @@ module.exports = {
           email: user.email,
           role: user.role,
         };
-        jwt.sign(userId, process.env.SECRET_KEY, (error, token) => {
-          if (error) {
-            console.log(error);
-            return callBack(error);
-          } else {
-            const resultToSend = {
-              email,
-              token,
-            };
-            return callBack(null, resultToSend);
+        jwt.sign(
+          userId,
+          process.env.SECRET_KEY,
+          {
+            expiresIn: 86400,
+          },
+          (error, token) => {
+            if (error) {
+              return callBack(error);
+            } else {
+              const resultToSend = {
+                email,
+                token,
+              };
+              return callBack(null, resultToSend);
+            }
           }
-        });
+        );
       }
     } catch (error) {
-      console.log(error);
       return callBack("Check Your Email Or Password");
     }
   },
   findUserDataById: async (data, callBack) => {
     try {
-      const dataUser = await Users.findOne({
+      const dataUser = await user.findOne({
         where: { id: data },
         attributes: {
-          exclude: ["createdAt", "updatedAt", "deletedAt", "password"],
+          exclude: ["createdAt", "updatedAt", "password"],
         },
         include: [
           {
-            model: Transactions,
+            model: transaction,
             as: "transactions",
             attributes: {
-              exclude: ["createdAt", "updatedAt", "deletedAt", "password"],
+              exclude: ["updatedAt"],
+            },
+          },
+          {
+            model: playlist,
+            as: "playlists",
+            attributes: {
+              exclude: ["updatedAt"],
+            },
+          },
+          {
+            model: like,
+            as: "liked",
+            attributes: {
+              exclude: ["updatedAt"],
             },
           },
         ],
@@ -140,16 +155,49 @@ module.exports = {
     }
   },
   changeUserPict: async (data, callBack) => {
+    const { id } = data.user;
     const newData = {
       thumbnail: data.files.thumbnail[0].filename,
     };
     try {
-      const result = await Users.update(newData, {
-        where: { id: data.user.id },
+      const result = await user.update(newData, {
+        where: {
+          id,
+        },
       });
       callBack(null, result);
     } catch (error) {
-      console.log(error);
+      callBack(error);
+    }
+  },
+  handlerLike: async (data, callBack) => {
+    try {
+      const userId = data.user.id;
+      const { songId } = data.params;
+      const checkAvail = await like.findOne({
+        where: {
+          userId,
+          songId,
+        },
+      });
+      if (!checkAvail) {
+        const result = await like.create({ userId, songId });
+        if (!result) {
+          return callBack("Server Error");
+        }
+        return callBack(null, "Liked");
+      }
+      const deletes = await like.destroy({
+        where: {
+          userId,
+          songId,
+        },
+      });
+      if (!deletes) {
+        return callBack("Server Error");
+      }
+      callBack(null, "Unliked");
+    } catch (error) {
       callBack(error);
     }
   },

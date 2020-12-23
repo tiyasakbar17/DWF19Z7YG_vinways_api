@@ -11,6 +11,9 @@ module.exports = {
       name: {
         type: Sequelize.STRING,
       },
+      thumbnail: {
+        type: Sequelize.STRING,
+      },
       atristId: {
         allowNull: false,
         type: Sequelize.INTEGER,
