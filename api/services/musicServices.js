@@ -1,4 +1,4 @@
-const { song, artist, album } = require("../../models");
+const { song, artist, album, like, playlistsong } = require("../../models");
 const Joi = require("joi");
 
 module.exports = {
@@ -149,6 +149,16 @@ module.exports = {
       const musicDelete = await song.destroy({
         where: {
           id: data,
+        },
+      });
+      await like.destroy({
+        where: {
+          songId: data,
+        },
+      });
+      await playlistsong.destroy({
+        where: {
+          songId: data,
         },
       });
       if (!musicDelete) {

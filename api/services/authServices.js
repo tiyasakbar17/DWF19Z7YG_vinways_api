@@ -129,13 +129,6 @@ module.exports = {
             },
           },
           {
-            model: playlist,
-            as: "playlists",
-            attributes: {
-              exclude: ["updatedAt"],
-            },
-          },
-          {
             model: like,
             as: "liked",
             attributes: {
