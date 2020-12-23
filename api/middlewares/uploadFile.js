@@ -12,26 +12,6 @@ cloudinary.config({
 });
 
 exports.uploadFile = (image, audio) => {
-  // const storage = multer.diskStorage({
-  //   destination: (req, file, cb) => {
-  //     if (file.fieldname === image) {
-  //       console.log(file.buffer);
-  //       cb(null, "uploads/img");
-  //     }
-  //     if (file.fieldname === audio) {
-  //       console.log(file.buffer);
-  //       cb(null, "uploads/audio");
-  //     }
-  //   },
-  //   filename: (req, file, cb) => {
-  //     const filename =
-  //       md5(new Date()) +
-  //       Math.floor(Math.random() * 1000) +
-  //       path.extname(file.originalname);
-  //     cb(null, filename);
-  //   },
-  // });
-
   let streamUpload = (buffer) => {
     return new Promise((resolve, reject) => {
       let stream = cloudinary.uploader.upload_stream(

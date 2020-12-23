@@ -1,7 +1,7 @@
 "use strict";
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable("Transactions", {
+    await queryInterface.createTable("likes", {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -12,23 +12,21 @@ module.exports = {
         allowNull: false,
         type: Sequelize.INTEGER,
         references: {
-          model: "Users",
+          model: "users",
           key: "id",
         },
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
       },
-      bankAccountNumber: {
+      songId: {
+        allowNull: false,
         type: Sequelize.INTEGER,
-      },
-      proofOfTransfer: {
-        type: Sequelize.STRING,
-      },
-      remainingActive: {
-        type: Sequelize.INTEGER,
-      },
-      paymentStatus: {
-        type: Sequelize.BOOLEAN,
+        references: {
+          model: "songs",
+          key: "id",
+        },
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
       },
       createdAt: {
         allowNull: false,
@@ -41,6 +39,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable("Transactions");
+    await queryInterface.dropTable("likes");
   },
 };
