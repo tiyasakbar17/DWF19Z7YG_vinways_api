@@ -152,7 +152,7 @@ module.exports = {
   changeUserPict: async (data, callBack) => {
     const { id } = data.user;
     const newData = {
-      thumbnail: data.files.thumbnail[0].filename,
+      avatar: data.files.thumbnail[0].filename,
     };
     try {
       const result = await user.update(newData, {
