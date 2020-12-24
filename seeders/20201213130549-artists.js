@@ -10,7 +10,7 @@ module.exports = {
         category: "Band",
         thumbnail:
           "http://res.cloudinary.com/tiyasakbar/image/upload/v1607797847/bhworpserdkoha8lcil2.jpg",
-        startCareer: "2005-01-01",
+        startCareer: "2005",
         createdAt: new Date(),
         updatedAt: new Date(),
       },
@@ -21,7 +21,7 @@ module.exports = {
         category: "Band",
         thumbnail:
           "http://res.cloudinary.com/tiyasakbar/image/upload/v1607798046/pvhmzlutjzugb7ss8cpn.jpg",
-        startCareer: "2006-01-01",
+        startCareer: "2006",
         createdAt: new Date(),
         updatedAt: new Date(),
       },
@@ -32,7 +32,7 @@ module.exports = {
         category: "Rapper",
         thumbnail:
           "http://res.cloudinary.com/tiyasakbar/image/upload/v1607857844/tprihl3yoivmbd8shldq.jpg",
-        startCareer: "2010-01-01",
+        startCareer: "2010",
         createdAt: new Date(),
         updatedAt: new Date(),
       },
