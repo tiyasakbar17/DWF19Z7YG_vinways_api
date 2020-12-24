@@ -9,8 +9,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      artist.hasMany(models.album, {
-        as: "albums",
+      artist.hasMany(models.song, {
+        as: "songs",
         foreignKey: "atristId",
       });
     }
@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
       name: DataTypes.STRING,
       category: DataTypes.STRING,
       startCareer: DataTypes.INTEGER,
-      age: DataTypes.INTEGER,
+      old: DataTypes.INTEGER,
       thumbnail: DataTypes.STRING,
     },
     {

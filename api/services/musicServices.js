@@ -1,4 +1,4 @@
-const { song, artist, album, like, playlistsong } = require("../../models");
+const { song, artist, like, playlistsong } = require("../../models");
 const Joi = require("joi");
 
 module.exports = {
@@ -10,18 +10,18 @@ module.exports = {
         },
         include: [
           {
-            model: album,
-            as: "album",
+            model: artist,
+            as: "artist",
             attributes: {
               exclude: ["updatedAt"],
             },
-            include: [
-              {
-                model: artist,
-                as: "artist",
-                attributes: ["name"],
-              },
-            ],
+          },
+          {
+            model: like,
+            as: "likedBy",
+            attributes: {
+              exclude: ["updatedAt"],
+            },
           },
         ],
       });
@@ -45,18 +45,18 @@ module.exports = {
         },
         include: [
           {
-            model: album,
-            as: "album",
+            model: artist,
+            as: "artist",
             attributes: {
               exclude: ["updatedAt"],
             },
-            include: [
-              {
-                model: artist,
-                as: "artist",
-                attributes: ["name"],
-              },
-            ],
+          },
+          {
+            model: like,
+            as: "likedBy",
+            attributes: {
+              exclude: ["updatedAt"],
+            },
           },
         ],
       });
@@ -74,7 +74,7 @@ module.exports = {
     try {
       const schema = Joi.object({
         title: Joi.string().required(),
-        albumId: Joi.number().required(),
+        artistId: Joi.number().required(),
         year: Joi.number().required(),
         genre: Joi.string().required(),
         thumbnail: Joi.string().required(),
@@ -109,7 +109,7 @@ module.exports = {
       const selectedMusic = await song.findOne({ where: { id } });
       const schema = Joi.object({
         title: Joi.string(),
-        albumId: Joi.number(),
+        artistId: Joi.number(),
         year: Joi.number(),
         thumbnail: Joi.string(),
         attachment: Joi.string(),

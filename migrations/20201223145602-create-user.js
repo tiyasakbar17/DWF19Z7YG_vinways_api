@@ -24,7 +24,7 @@ module.exports = {
       password: {
         type: Sequelize.STRING,
       },
-      activeUntil: {
+      activeDay: {
         type: Sequelize.DATE,
       },
       createdAt: {

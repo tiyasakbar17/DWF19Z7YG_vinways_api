@@ -30,7 +30,7 @@ module.exports = (sequelize, DataTypes) => {
       avatar: DataTypes.STRING,
       role: DataTypes.INTEGER,
       password: DataTypes.STRING,
-      activeUntil: DataTypes.DATE,
+      activeDay: DataTypes.DATE,
     },
     {
       sequelize,

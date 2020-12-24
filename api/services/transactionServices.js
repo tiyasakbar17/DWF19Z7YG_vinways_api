@@ -1,14 +1,14 @@
-const { Transactions, Users } = require("../../models");
+const { transaction, user } = require("../../models");
 const Joi = require("joi");
 
 module.exports = {
-  getAllTransactions: async (data, callBack) => {
+  getAllTransactions: async (callBack) => {
     try {
-      const allTransactions = await Transactions.findAll({
-        attributes: { exclude: ["updatedAt", "deletedAt"] },
+      const allTransactions = await transaction.findAll({
+        attributes: { exclude: ["updatedAt"] },
         include: [
           {
-            model: Users,
+            model: user,
             as: "user",
             attributes: ["fullName", "activeDay"],
           },
@@ -25,14 +25,14 @@ module.exports = {
   },
   getTransactionById: async (data, callBack) => {
     try {
-      const getTransaction = await Transactions.findOne({
+      const getTransaction = await transaction.findOne({
         where: {
           id: data,
         },
-        attributes: { exclude: ["createdAt", "updatedAt", "deletedAt"] },
+        attributes: { exclude: ["updatedAt"] },
         include: [
           {
-            model: Users,
+            model: user,
             as: "user",
             attributes: ["fullName", "activeDay"],
           },
@@ -49,7 +49,6 @@ module.exports = {
   },
   addTransaction: async (data, callBack) => {
     const { body, files, user } = data;
-    console.log(user);
     try {
       const schema = Joi.object({
         userId: Joi.number().required(),
@@ -68,22 +67,11 @@ module.exports = {
       if (error) {
         callBack(error);
       } else {
-        const newTransaction = await Transactions.create(insertedData);
+        const newTransaction = await transaction.create(insertedData);
         if (!newTransaction) {
           callBack("Please Try Again");
         } else {
-          const resultToShow = await Transactions.findOne({
-            where: { id: newTransaction.id },
-            attributes: { exclude: ["createdAt", "updatedAt", "deletedAt"] },
-            include: [
-              {
-                model: Users,
-                as: "user",
-                attributes: ["fullName", "activeDay"],
-              },
-            ],
-          });
-          callBack(null, resultToShow);
+          callBack(null, "Transaction Added");
         }
       }
     } catch (error) {
@@ -97,9 +85,9 @@ module.exports = {
       files,
     } = data;
     try {
-      const calledTransaction = await Transactions.findOne({
+      const calledTransaction = await transaction.findOne({
         where: { id },
-        include: [{ model: Users, as: "user" }],
+        include: [{ model: user, as: "user" }],
       });
       if (!calledTransaction) {
         callBack("Transaction is not found");
@@ -134,18 +122,16 @@ module.exports = {
                 const newActiveDay = {
                   activeDay: new Date(today + increment),
                 };
-                const newUser = await Users.update(newActiveDay, {
+                const newUser = await user.update(newActiveDay, {
                   where: { id: calledTransaction.userId },
                 });
-                console.log(newActiveDay);
               } else {
                 const newActiveDay = {
                   activeDay: new Date(oldDate + increment),
                 };
-                const newUser = await Users.update(newActiveDay, {
+                const newUser = await user.update(newActiveDay, {
                   where: { id: calledTransaction.userId },
                 });
-                console.log(newActiveDay);
               }
             }
           }
@@ -154,24 +140,23 @@ module.exports = {
               const newActiveDay = {
                 activeDay: new Date(oldDate - increment),
               };
-              const newUser = await Users.update(newActiveDay, {
+              const newUser = await user.update(newActiveDay, {
                 where: { id: calledTransaction.userId },
               });
-              console.log(newActiveDay);
             }
           }
-          const editedTransaction = await Transactions.update(insertedData, {
+          const editedTransaction = await transaction.update(insertedData, {
             where: { id },
           });
           if (!editedTransaction) {
             callBack("Please Try Again");
           } else {
-            const resultToShow = await Transactions.findOne({
+            const resultToShow = await transaction.findOne({
               where: { id },
-              attributes: { exclude: ["createdAt", "updatedAt", "deletedAt"] },
+              attributes: { exclude: ["updatedAt"] },
               include: [
                 {
-                  model: Users,
+                  model: user,
                   as: "user",
                   attributes: ["fullName", "activeDay"],
                 },
@@ -187,7 +172,7 @@ module.exports = {
   },
   deleteTransaction: async (data, callBack) => {
     try {
-      const deletedTransaction = await Transactions.destroy({
+      const deletedTransaction = await transaction.destroy({
         where: { id: data },
       });
       if (!deletedTransaction) {
@@ -201,9 +186,9 @@ module.exports = {
   },
   getUserTransactions: async (data, callBack) => {
     try {
-      const getData = await Transactions.findAll({
+      const getData = await transaction.findAll({
         where: { userId: data },
-        attributes: { exclude: ["updatedAt", "deletedAt"] },
+        attributes: { exclude: ["updatedAt"] },
       });
       callBack(null, getData);
     } catch (error) {

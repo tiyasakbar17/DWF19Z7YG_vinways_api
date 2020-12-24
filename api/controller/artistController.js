@@ -50,8 +50,7 @@ module.exports = {
     });
   },
   editArtist: (req, res) => {
-    const data = { id: req.params.id, body: req.body, files: req.files };
-    editArtist(data, (error, results) => {
+    editArtist(req, (error, results) => {
       if (error) {
         if (error.details) {
           const details = error.details.map((detail) => detail.message);

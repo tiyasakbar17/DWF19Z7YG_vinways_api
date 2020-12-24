@@ -1,25 +1,11 @@
-const { Artists, Musics } = require("../../models");
+const { artist, song, like } = require("../../models");
 const Joi = require("joi");
 
 module.exports = {
   getAllArtists: async (callBack) => {
     try {
-      const artistLists = await Artists.findAll({
-        attributes: { exclude: ["createdAt", "updatedAt", "deletedAt"] },
-        include: [
-          {
-            model: Musics,
-            as: "musics",
-            attributes: { exclude: ["updatedAt", "deletedAt"] },
-            include: [
-              {
-                model: Artists,
-                as: "artist",
-                attributes: ["name"],
-              },
-            ],
-          },
-        ],
+      const artistLists = await artist.findAll({
+        attributes: { exclude: ["updatedAt"] },
       });
       if (!artistLists) {
         callBack("No Artists Found");
@@ -32,11 +18,25 @@ module.exports = {
   },
   getArtistById: async (data, callBack) => {
     try {
-      const selectedArtist = await Artists.findOne({
+      const selectedArtist = await artist.findOne({
         where: {
           id: data,
         },
-        attributes: { exclude: ["createdAt", "updatedAt", "deletedAt"] },
+        attributes: { exclude: ["updatedAt"] },
+        include: [
+          {
+            model: song,
+            as: "songs",
+            attributes: { exclude: ["updatedAt"] },
+            include: [
+              {
+                model: like,
+                as: "likedBy",
+                attributes: { exclude: ["updatedAt"] },
+              },
+            ],
+          },
+        ],
       });
       if (!selectedArtist) {
         callBack("Artist Not Found");
@@ -66,13 +66,11 @@ module.exports = {
       if (error) {
         callBack(error);
       } else {
-        const newArtist = await Artists.create(dataArtist);
-        const { id, name, old, category, startCareer, thumbnail } = newArtist;
-
+        const newArtist = await artist.create(dataArtist);
         if (!newArtist) {
           callBack("Can't Add Artist, Please Try Again");
         } else {
-          callBack(null, { id, name, old, category, startCareer, thumbnail });
+          callBack(null, "Artist Added");
         }
       }
     } catch (error) {
@@ -80,9 +78,10 @@ module.exports = {
     }
   },
   editArtist: async (data, callBack) => {
-    const { id, body, files } = data;
+    const { id } = data.params;
+    const { body, files } = data;
     try {
-      const artistCalled = await Artists.findOne({
+      const artistCalled = await artist.findOne({
         where: {
           id,
         },
@@ -94,7 +93,7 @@ module.exports = {
           name: Joi.string().min(2),
           old: Joi.number(),
           category: Joi.string(),
-          startCareer: Joi.date(),
+          startCareer: Joi.number(),
           thumbnail: Joi.string(),
         });
 
@@ -102,7 +101,7 @@ module.exports = {
           ...body,
           thumbnail: files.thumbnail
             ? files.thumbnail[0].filename
-            : artistCalled.newArtistDatathumbnail,
+            : artistCalled.thumbnail,
         };
 
         const { error } = schema.validate(newArtistData, { abortEarly: false });
@@ -110,19 +109,13 @@ module.exports = {
         if (error) {
           callBack(error);
         } else {
-          const artistUpdated = await Artists.update(newArtistData, {
+          const artistUpdated = await artist.update(newArtistData, {
             where: { id },
           });
           if (!artistUpdated) {
             callBack("Please Try Again");
           } else {
-            const result = await Artists.findOne({
-              where: { id },
-              attributes: {
-                exclude: ["createdAt", "updatedAt", "artistId"],
-              },
-            });
-            callBack(null, result);
+            callBack(null, "Artist Edited");
           }
         }
       }
@@ -132,7 +125,9 @@ module.exports = {
   },
   deleteArtist: async (data, callBack) => {
     try {
-      const deletedArtist = await Artists.destroy({ where: { id: data } });
+      const deletedArtist = await artist.destroy({
+        where: { id: data },
+      });
       if (!deletedArtist) {
         callBack("User tidak ditemukan");
       } else {

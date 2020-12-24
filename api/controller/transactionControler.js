@@ -14,7 +14,7 @@ const {
 
 module.exports = {
   getTransactions: (req, res) => {
-    getAllTransactions(req.body, (error, results) => {
+    getAllTransactions((error, results) => {
       if (error) {
         failedResponse(res, error);
       } else {
@@ -79,7 +79,7 @@ module.exports = {
     const { id } = req.user;
     getUserTransactions(id, (error, results) => {
       if (error) {
-        successResponse(res, [], "Transaction Loaded", "transactions");
+        failedResponse(res, "Server Error");
       } else {
         successResponse(res, results, "Transactions Loaded", "transactions");
       }

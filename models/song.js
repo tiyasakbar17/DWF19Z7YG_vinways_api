@@ -9,17 +9,18 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      song.belongsTo(models.album, {
-        as: "album",
-        foreignKey: "albumId",
+      song.belongsTo(models.artist, {
+        as: "artist",
+        foreignKey: "atristId",
       });
       song.hasMany(models.like, {
         as: "likedBy",
         foreignKey: "songId",
       });
-      song.hasMany(models.playlistsong, {
+      song.hasMany(models.playlist, {
+        through: models.playlist,
         as: "playlists",
-        foreignKey: "songId",
+        foreignKey: "playlistId",
       });
     }
   }
@@ -30,7 +31,7 @@ module.exports = (sequelize, DataTypes) => {
       attachment: DataTypes.STRING,
       year: DataTypes.INTEGER,
       genre: DataTypes.STRING,
-      albumId: DataTypes.INTEGER,
+      artistId: DataTypes.INTEGER,
     },
     {
       sequelize,
