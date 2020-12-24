@@ -13,9 +13,8 @@ module.exports = (sequelize, DataTypes) => {
         as: "user",
         foreignKey: "userId",
       });
-      playlist.hasMany(models.song, {
-        through: models.playlistsong,
-        as: "songs",
+      playlist.hasMany(models.playlistsong, {
+        as: "playlists",
         foreignKey: "songId",
       });
     }

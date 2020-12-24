@@ -1,4 +1,4 @@
-const { user, transaction, playlist, like } = require("../../models");
+const { user, transaction, like } = require("../../models");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const Joi = require("joi");
@@ -73,22 +73,24 @@ module.exports = {
       if (error) {
         return callBack(error);
       }
-
-      const user = await user.findOne({
+      console.log("ERROR", email);
+      const calledUser = await user.findOne({
         where: {
           email,
         },
       });
+      const validatingPassword = await bcrypt.compare(
+        password,
+        calledUser.password
+      );
 
-      const validatingPassword = await bcrypt.compare(password, user.password);
-
-      if (!user || !validatingPassword) {
+      if (!calledUser || !validatingPassword) {
         return callBack("Check Your Email Or Password");
       } else {
         const userId = {
-          id: user.id,
-          email: user.email,
-          role: user.role,
+          id: calledUser.id,
+          email: calledUser.email,
+          role: calledUser.role,
         };
         jwt.sign(
           userId,

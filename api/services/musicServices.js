@@ -8,6 +8,7 @@ module.exports = {
         attributes: {
           exclude: ["updatedAt"],
         },
+        order: [["id", "DESC"]],
         include: [
           {
             model: artist,
