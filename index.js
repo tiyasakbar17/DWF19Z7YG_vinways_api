@@ -15,6 +15,11 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use("/uploads", express.static("uploads"));
+app.get("/", (req, res) => {
+  res.json({
+    "Hello World!"
+  })
+});
 
 //ROUTER To Api
 app.use("/api/v1", router);
