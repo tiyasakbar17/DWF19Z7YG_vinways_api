@@ -33,12 +33,12 @@ module.exports = {
             password: hashedPassword,
             role: 2,
           };
-          const user = await user.create(newUser);
+          const newUser = await user.create(newUser);
 
           const tokenPayload = {
-            id: user.id,
-            email: user.email,
-            role: user.role,
+            id: newUser.id,
+            email: newUser.email,
+            role: newUser.role,
           };
           jwt.sign(
             tokenPayload,
