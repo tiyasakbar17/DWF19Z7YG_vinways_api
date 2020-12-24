@@ -18,8 +18,8 @@ module.exports = (sequelize, DataTypes) => {
   transaction.init(
     {
       userId: DataTypes.INTEGER,
-      thumbnail: DataTypes.STRING,
-      status: DataTypes.BOOLEAN,
+      proofOfTransfer: DataTypes.STRING,
+      paymentStatus: DataTypes.BOOLEAN,
       bankAccountNumber: DataTypes.INTEGER,
     },
     {

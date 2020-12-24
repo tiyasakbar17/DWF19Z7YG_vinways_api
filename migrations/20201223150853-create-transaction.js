@@ -18,10 +18,10 @@ module.exports = {
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
       },
-      thumbnail: {
+      proofOfTransfer: {
         type: Sequelize.STRING,
       },
-      status: {
+      paymentStatus: {
         type: Sequelize.BOOLEAN,
       },
       bankAccountNumber: {
