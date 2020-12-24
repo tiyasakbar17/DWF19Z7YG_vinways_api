@@ -28,12 +28,12 @@ module.exports = {
           callBack("Use Another Email");
         } else {
           const hashedPassword = await bcrypt.hash(password, 10);
-          const newUser = {
+          const newUserData = {
             ...data,
             password: hashedPassword,
             role: 2,
           };
-          const newUser = await user.create(newUser);
+          const newUser = await user.create(newUserData);
 
           const tokenPayload = {
             id: newUser.id,
