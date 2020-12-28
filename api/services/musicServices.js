@@ -29,10 +29,7 @@ module.exports = {
       if (!allMusics.length) {
         return callBack("Musics Empty");
       } else {
-        return callBack(null, {
-          ...allMusics,
-          likes: allMusics.likedBy.length,
-        });
+        return callBack(null, allMusics);
       }
     } catch (error) {
       callBack(error);
