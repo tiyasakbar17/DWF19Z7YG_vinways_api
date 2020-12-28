@@ -71,7 +71,7 @@ module.exports = {
       }
     });
   },
-  likeHandler: (rea, res) => {
+  likeHandler: (req, res) => {
     handlerLike(req, (error, results) => {
       if (error) {
         return failedResponse(res, error);
