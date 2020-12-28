@@ -28,6 +28,7 @@ module.exports = {
             model: song,
             as: "songs",
             attributes: { exclude: ["updatedAt"] },
+            order: [["id", "DESC"]],
             include: [
               {
                 model: like,
