@@ -8,6 +8,7 @@ const {
   findUserByToken,
   changePict,
   likeHandler,
+  changePassword,
 } = require("../controller/authController");
 const { uploadFile } = require("../middlewares/uploadFile");
 const {
@@ -44,6 +45,7 @@ router.patch(
   changePict
 );
 router.post("/like/:songId", jwtRoleAuth(2), likeHandler);
+router.post("/user/", jwtRoleAuth(2), changePassword);
 
 //MUSIC
 router.get("/songs/", jwtRoleAuth(2), getMusics);

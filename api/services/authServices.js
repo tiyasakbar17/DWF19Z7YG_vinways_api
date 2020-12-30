@@ -196,4 +196,27 @@ module.exports = {
       callBack(error);
     }
   },
+  changePassword: async (data, callBack) => {
+    try {
+      const { id } = data.user;
+      const {
+        body: { oldPassword, newPassword },
+      } = data;
+      const calledUser = await user.findOne({ where: { id } });
+      const validate = bcrypt.compare(oldPassword, calledUser.password);
+      if (!validate) {
+        return callBack("Input Your Old Password Correctly");
+      }
+      const result = await user.update(
+        { password: newPassword },
+        { where: { id } }
+      );
+      if (!result) {
+        return callBack("Failed, please try again");
+      }
+      callBack(null, result);
+    } catch (error) {
+      callBack(error);
+    }
+  },
 };

@@ -9,6 +9,7 @@ const {
   findUserDataById,
   changeUserPict,
   handlerLike,
+  changePassword,
 } = require("../services/authServices");
 
 module.exports = {
@@ -77,6 +78,14 @@ module.exports = {
         return failedResponse(res, error);
       }
       successResponse(res, results, results, "status");
+    });
+  },
+  changePassword: (req, res) => {
+    changePassword(req, (error, results) => {
+      if (error) {
+        return failedResponse(res, JSON.stringify(error));
+      }
+      successResponse(res, results, "password Changed");
     });
   },
 };
